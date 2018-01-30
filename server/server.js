@@ -39,27 +39,22 @@ app.get('/todos', (req, res) => {
 app.get('/todos/:id' , (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
-        console.log('ID not valid');
-        return res
-        .status(404)
-        .send();
+        return res.status(404).send();
 
     } Todo.findById(id).then((todo) => {
         if (!todo) {
-            return res
-            .status(404)
-            .send();
+            //make sure you return to stop the program
+            return res.status(404).send();
             
 
-        } console.log('Todo by ID:', todo);
-        res
+        }res
         .status(200)
-        .send(todo);
+        // see **** {todo}
+        .send({todo});
         
         
 
     }).catch((e) => {
-        console.log(e);
         res.status(400).send();
     });
 
@@ -82,27 +77,60 @@ app.listen(3000, () => {
 
 
 module.exports = {app};
-// var newTodo = new Todo({
-//     text: 'Cook dinner'
-// })
+    // var newTodo = new Todo({
+    //     text: 'Cook dinner'
+    // })
 
-// var newTodo = new Todo({
-//     text: 'Lozss  '
-// });
+    // var newTodo = new Todo({
+    //     text: 'Lozss  '
+    // });
 
-// var newUser = new User({
-//     email: 'ccnwankpa@gmail.com  '
-// });
+    // var newUser = new User({
+    //     email: 'ccnwankpa@gmail.com  '
+    // });
 
 
-// // newTodo.save().then((doc) => {
-// //     console.log(JSON.stringify(doc, undefined, 2));
-// // }, (e) => {
-// //     console.log('Unable to save todo', e);
-// // });
+    // // newTodo.save().then((doc) => {
+    // //     console.log(JSON.stringify(doc, undefined, 2));
+    // // }, (e) => {
+    // //     console.log('Unable to save todo', e);
+    // // });
 
-// newUser.save().then((doc) => {
-//     console.log(JSON.stringify(doc, undefined, 2));
-// }, (e) => {
-//     console.log('Unable to save user', e);
-// });
+    // newUser.save().then((doc) => {
+    //     console.log(JSON.stringify(doc, undefined, 2));
+    // }, (e) => {
+    //     console.log('Unable to save user', e);
+    // });
+
+// see **** {todo}
+    // In your server.js file, make sure your send the todo inside {}
+
+
+    // res.status(200).send({todo});
+
+
+
+    // I had it as 
+
+    // res.status(200).send(todo);
+
+    // which meant the object returned was a single object with the _id, text etc properties rather than a todo object that would then have the properties inside it i.e. it would return this:
+
+    // { _id: '5a469ae74ebd81e4f064c78e',
+    //      __v: 0,
+    //      text: 'first test todo',
+    //      completedAt: null,
+    //      completed: false } 
+
+
+
+    // rather than this:
+
+    // { todo:
+    //    { _id: '5a469ae74ebd81e4f064c78e',
+    //      __v: 0,
+    //      text: 'first test todo',
+    //      completedAt: null,
+    //      completed: false } }
+
+    // Hope it helps!
